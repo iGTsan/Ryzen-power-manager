@@ -30,8 +30,10 @@ if(NOT CMAKE_CXX_EXTENSIONS)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
-set(SOURCES ./src/main.cpp)
+include_directories("headers/")
 
-add_executable(ryzen_maneger ${SOURCES})
+set(SOURCES ./src/main.cpp ./src/entrie.cpp)
+
+add_executable(ryzen_manager ${SOURCES})
 
 
