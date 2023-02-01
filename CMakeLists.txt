@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.13)
 
 project(ryzen-power-manager VERSION 1.0 LANGUAGES CXX)
 
-option(MANAGER_TESTING "Включить модульное тестирование" ON)
-option(MANAGER_COVERAGE "Включить измерение покрытия кода тестами" OFF)
+# option(MANAGER_TESTING "Включить модульное тестирование" ON)
+# option(MANAGER_COVERAGE "Включить измерение покрытия кода тестами" OFF)
 
 add_compile_options(
     -Werror
@@ -32,7 +32,16 @@ endif()
 
 include_directories("headers/")
 
-set(SOURCES ./src/main.cpp ./src/entrie.cpp)
+set(SRC_DIR src)
+
+# message("SOURCES:" ${SOURCES})
+
+# set(SOURCES main.cpp)
+
+file(GLOB SOURCES ${SRC_DIR}/*.cpp)
+
+
+message("SOURCES:" ${SOURCES})
 
 add_executable(ryzen_manager ${SOURCES})
 
