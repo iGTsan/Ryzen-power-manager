@@ -17,18 +17,19 @@ bool manager_core::Core::check_password(const std::string &password) {
      return 0;
 }
 
-MI::Entrie *make_subentrie(const std::string& line) {
+MI::Entry *make_subentrie(const std::string& line) {
      auto param_start = line.find('-');
      if (param_start == std::string::npos || (param_start != 0 && line[param_start - 1] != ' ')) 
           return NULL;
      // std::cout << line << std::endl;
-     MI::Entrie *subentrie = new MI::Entrie;
-     auto param_end = line.find_first_of(" =.,\n\t", param_start);
+     MI::ValueEntry *subentrie = NULL;
+     std::string end_symbs = " =.,\n\t[";
+     auto param_end = line.find_first_of(end_symbs, param_start);
      if (param_end == std::string::npos) {
           std::cout << line << std::endl;
-          return NULL;
      }
      else {
+          subentrie = new MI::ValueEntry;
           std::string command = line.substr(param_start, param_end - param_start);
           std::string desc = line.substr(param_end);
           subentrie->set_command(command);
@@ -37,15 +38,15 @@ MI::Entrie *make_subentrie(const std::string& line) {
      return subentrie;
 }
 
-MI::Entrie *make_entrie(std::string& command) {
+MI::Entry *make_entrie(std::string& command) {
      if (command.size() == 0)
           return NULL;
      std::string filename = "command_out";
-     MI::Entrie *entrie = new MI::Entrie;
+     MI::Entry *entrie = new MI::Entry;
      std::system((command + " --help > " + filename).c_str());
      std::ifstream file(filename);
      std::string command_out;
-     std::vector<MI::Entrie *> subentries;
+     std::vector<MI::Entry *> subentries;
      do {
           // file >> command_out;
           std::getline(file, command_out, '\n');
@@ -58,15 +59,15 @@ MI::Entrie *make_entrie(std::string& command) {
      return entrie;
 }
 
-manager_interface::Entrie *manager_core::parse(const std::string &filename) {
+manager_interface::Entry *manager_core::parse(const std::string &filename) {
      std::ifstream file("../resources/" + filename);
      system("pwd");
      if (!file.is_open())
           throw FileError();
      std::string command;
      std::string name = "Menu";
-     MI::Entrie *menu = new MI::Entrie;
-     std::vector<MI::Entrie *> subentries;
+     MI::Entry *menu = new MI::Entry;
+     std::vector<MI::Entry *> subentries;
      do {
           file >> command;
           auto subentrie = make_entrie(command);
