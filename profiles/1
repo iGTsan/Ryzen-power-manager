@@ -1,0 +1,4 @@
+
+ln -S value --help value
+make --debug value -v value --warn-undefined-variables value
+ryzenadj -a value -t value --oc-volt value

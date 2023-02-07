@@ -1,5 +1,4 @@
 #include <iostream>
-#include "entrie.h"
 #include "core.h"
 
 int main() {
@@ -7,6 +6,9 @@ int main() {
 	manager_interface::Entry entr;
 	auto vec = entr.get_subentries();
 	auto menu = manager_core::parse("to_parse");
-	delete menu;
+	manager_core::Core core(menu);
+	core.set_profilename("1");
+	core.save_profile();
+
 	// menu->print(std::cout);
 }
