@@ -30,10 +30,6 @@ MI::Entry *make_subentrie(const std::string& line, MI::Entry *parent) {
      }
      else {
           subentrie = new MI::ValueEntry(parent);
-          int tmp = std::rand() % 100;
-          std::cout << tmp << std::endl;
-          if (tmp % 10 == 0)
-               subentrie->set_value("value");
           std::string command = line.substr(param_start, param_end - param_start);
           std::string desc = line.substr(param_end);
           subentrie->set_command(command);
@@ -59,6 +55,7 @@ MI::Entry *make_entrie(const std::string& command, MI::Entry *parent) {
                subentries.push_back(subentrie);
      } while (!file.eof());
      entrie->set_command(command);
+     entrie->set_name(command);
      entrie->set_subentries(subentries);
      return entrie;
 }
@@ -94,3 +91,27 @@ void manager_core::Core::save_profile() {
      }
 
 }
+
+void manager_core::Core::choose(size_t n) {
+     auto new_menu = menu->get_subentry(n - 1);
+     if (new_menu)
+          menu = new_menu;
+     else
+          valid = false;
+}
+
+/*
+   std::string sudo_password;
+        std::string profile_name;
+        MI::Entry *menu;
+*/
+
+manager_core::Core::Core(manager_core::Core &other) :
+     sudo_password(other.sudo_password), 
+     profile_name(other.profile_name), 
+     menu(other.menu) {}
+
+manager_core::Core::Core(manager_core::Core &&other) :
+     sudo_password(std::move(other.sudo_password)),
+     profile_name(std::move(other.profile_name)),
+     menu(other.menu) {other.menu = NULL;}

@@ -30,19 +30,39 @@ if(NOT CMAKE_CXX_EXTENSIONS)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
-include_directories("headers/")
 
 set(SRC_DIR src)
+
+
+
+set(EXECUTABLE ryzen_manager)
+set(LIBRARY lib)
+set(UI ui)
+# set(SOURCE ui/src/main.cpp)
+file(GLOB SOURCES ui/src/*.cpp)
+
+include_directories(${LIBRARY}/headers/)
+include_directories(${UI}/headers/)
+
+
+
 
 # message("SOURCES:" ${SOURCES})
 
 # set(SOURCES main.cpp)
 
-file(GLOB SOURCES ${SRC_DIR}/*.cpp)
+# file(GLOB SOURCES ${SRC_DIR}/*.cpp)
 
+message("dir " ${CMAKE_CURRENT_SOURCE_DIR})
+
+message("dir " ${CMAKE_CURRENT_LIST_DIR})
 
 message("SOURCES:" ${SOURCES})
 
-add_executable(ryzen_manager ${SOURCES})
+add_executable(${EXECUTABLE} ${SOURCES})
 
+add_subdirectory(lib)
+# add_subdirectory(ui)
 
+target_link_libraries(${EXECUTABLE} ${LIBRARY})
+# target_link_libraries(${EXECUTABLE} ${UI_LIBRARY})

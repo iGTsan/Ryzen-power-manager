@@ -41,15 +41,19 @@ namespace manager_interface
         void set_desc(const std::string &_desc) { description = _desc; }
         void set_command(const std::string &_command) { command = _command; }
         void set_sudo_req(bool req) { sudo_required = req; }
+        void set_parent(Entry *_parent) { parent = _parent; }
 
         const std::vector<Entry *> &get_subentries() const { return subentries; }
         bool get_sudo_req() const { return sudo_required; }
-        const std::string &get_name() const { return name; }
+        virtual const std::string &get_name() const { return name; }
         const std::string &get_desc() const { return description; }
         const std::string &get_command() const { return command; }
+        virtual std::string get_info() const;
         virtual EntrieType get_type() const { return EntrieType::Menu; }
+        Entry* get_parent() const {return parent;}
 
         virtual std::string gen_command() const;
+        Entry* get_subentry(size_t n);
 
         // void print(std::ostream& c);
 
@@ -69,6 +73,8 @@ namespace manager_interface
 
         bool get_enabled() const { return enabled; }
         virtual EntrieType get_type() const override { return EntrieType::CheckFlag; }
+        const std::string &get_name() const override { return get_command(); }
+        std::string get_info() const override;
 
         virtual std::string gen_command() const override;
 
@@ -93,6 +99,8 @@ namespace manager_interface
 
         ~ValueEntry(){};
     };
+
+    class WrongOption : std::exception {};
 }
 
 #endif
