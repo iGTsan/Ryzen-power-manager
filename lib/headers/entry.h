@@ -3,7 +3,10 @@
 
 #include <vector>
 #include <string>
+#include "consts.h"
 // #include <iostream> //delete
+
+namespace MCS = manager_consts;
 
 namespace manager_interface
 {
@@ -13,7 +16,9 @@ namespace manager_interface
         ValueFlag,
         Info,
         Menu,
-        Command
+        Command,
+        Save,
+        Load
     };
 
     class Entry
@@ -32,7 +37,7 @@ namespace manager_interface
 
     public:
         Entry() : Entry(NULL){};
-        Entry(Entry *parent) : Entry("", parent) {}
+        Entry(Entry *parent) : Entry(MCS::default_entry_name, parent) {}
         Entry(const std::string &name, Entry *parent) : parent(parent), name(name) {}
         
 
@@ -101,6 +106,24 @@ namespace manager_interface
     };
 
     class WrongOption : std::exception {};
+
+    class SaveProfile : public Entry 
+    {
+    public:
+        SaveProfile() : Entry() {};
+        SaveProfile(Entry *parent) : Entry(MCS::save_profile, parent) {};
+
+        EntrieType get_type() const override { return EntrieType::Save; }
+    };
+
+    class LoadProfile : public Entry 
+    {
+    public:
+        LoadProfile() : Entry() {};
+        LoadProfile(Entry *parent) : Entry(MCS::load_profile, parent) {};
+
+        EntrieType get_type() const override { return EntrieType::Load; }
+    };
 }
 
 #endif

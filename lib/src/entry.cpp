@@ -7,7 +7,7 @@ manager_interface::Entry::~Entry() {
 
 std::string manager_interface::Entry::get_info() const
 {
-    std::string res = "Name: " + get_name();
+    std::string res = get_name();
     return res;
 }
 

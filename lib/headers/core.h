@@ -10,30 +10,47 @@
 namespace MI = manager_interface;
 
 namespace manager_core {
+
+    enum InterfaceStates 
+    {
+        Show, 
+        ValueInput, 
+        FlagInput, 
+        Off,
+        Save,
+        Load
+    };
+
     class Core {
     private:
+        InterfaceStates status = Show;
         std::string sudo_password;
         std::string profile_name;
         MI::Entry *menu;
-        bool valid = true;
+        MI::Entry *main_menu;
 
         bool check_password(const std::string& password);
 
+    protected:
+        void set_enabled(bool enabled);
+        void set_value(const std::string& value);
+        bool get_enabled();
+
     public:
-        Core() {};
-        Core(MI::Entry *menu) : menu(menu) {};
+        Core(MI::Entry *menu) : menu(menu), main_menu(menu) {};
         Core(Core& other);
         Core(Core&& other);
 
         void set_password(const std::string& password);
-        void set_profilename(const std::string& name) { profile_name = name; }
+        void set_profile_name(const std::string& name) { profile_name = name; }
 
         void save_profile();
         void load_profile(const std::string& name);
 
         MI::Entry *get_menu() {return menu;}
+        InterfaceStates get_status() const {return status;}
+
         void choose(size_t n);
-        bool is_valid() const {return valid;}
 
         ~Core() {delete menu;}
     };
@@ -41,6 +58,9 @@ namespace manager_core {
     class WrongSudoPassword : std::exception {};
     class FileError : std::exception {};
     class NoProfileName : std::exception {};
+    class WrongMenuType : std::exception {};
+    class WrongEntryType : std::exception {};
+
 
     MI::Entry *parse(const std::string& filename);
 }
