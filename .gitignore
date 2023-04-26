@@ -2,3 +2,5 @@ build/
 profiles/
 .*
 command_out
+profiles/*
+resources/img/

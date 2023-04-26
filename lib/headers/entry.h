@@ -10,7 +10,7 @@ namespace MCS = manager_consts;
 
 namespace manager_interface
 {
-    enum EntrieType
+    enum EntryType
     {
         CheckFlag,
         ValueFlag,
@@ -18,7 +18,8 @@ namespace manager_interface
         Menu,
         Command,
         Save,
-        Load
+        Load,
+        ChangeName
     };
 
     class Entry
@@ -45,7 +46,7 @@ namespace manager_interface
         void set_name(const std::string &_name) { name = _name; }
         void set_desc(const std::string &_desc) { description = _desc; }
         void set_command(const std::string &_command) { command = _command; }
-        void set_sudo_req(bool req) { sudo_required = req; }
+        void set_sudo_req(bool req);
         void set_parent(Entry *_parent) { parent = _parent; }
 
         const std::vector<Entry *> &get_subentries() const { return subentries; }
@@ -54,8 +55,9 @@ namespace manager_interface
         const std::string &get_desc() const { return description; }
         const std::string &get_command() const { return command; }
         virtual std::string get_info() const;
-        virtual EntrieType get_type() const { return EntrieType::Menu; }
+        virtual EntryType get_type() const { return EntryType::Menu; }
         Entry* get_parent() const {return parent;}
+
 
         virtual std::string gen_command() const;
         Entry* get_subentry(size_t n);
@@ -77,7 +79,7 @@ namespace manager_interface
         void set_enabled(bool _enabled);
 
         bool get_enabled() const { return enabled; }
-        virtual EntrieType get_type() const override { return EntrieType::CheckFlag; }
+        virtual EntryType get_type() const override { return EntryType::CheckFlag; }
         const std::string &get_name() const override { return get_command(); }
         std::string get_info() const override;
 
@@ -98,14 +100,12 @@ namespace manager_interface
         void set_value(const std::string &_value);
 
         const std::string &get_value() const { return value; }
-        EntrieType get_type() const override { return EntrieType::ValueFlag; }
+        EntryType get_type() const override { return EntryType::ValueFlag; }
 
         std::string gen_command() const override;
 
         ~ValueEntry(){};
     };
-
-    class WrongOption : std::exception {};
 
     class SaveProfile : public Entry 
     {
@@ -113,7 +113,7 @@ namespace manager_interface
         SaveProfile() : Entry() {};
         SaveProfile(Entry *parent) : Entry(MCS::save_profile, parent) {};
 
-        EntrieType get_type() const override { return EntrieType::Save; }
+        EntryType get_type() const override { return EntryType::Save; }
     };
 
     class LoadProfile : public Entry 
@@ -122,8 +122,30 @@ namespace manager_interface
         LoadProfile() : Entry() {};
         LoadProfile(Entry *parent) : Entry(MCS::load_profile, parent) {};
 
-        EntrieType get_type() const override { return EntrieType::Load; }
+        EntryType get_type() const override { return EntryType::Load; }
     };
+
+    class ChangeProfileName : public Entry 
+    {
+    public:
+        ChangeProfileName() : Entry() {};
+        ChangeProfileName(Entry *parent) : Entry(MCS::change_profile_name, parent) {};
+
+        EntryType get_type() const override { return EntryType::ChangeName; }
+    };
+
+    class MenuEntry : public Entry 
+    {
+    public:
+        MenuEntry() : Entry(MCS::menu_name, NULL) {};
+
+        EntryType get_type() const override { return EntryType::Menu; }
+        std::string gen_command() const override;
+    };
+
+    class WrongOption : std::exception {};
+    class WrongEntry : std::exception {};
+    class WrongEntryType : std::exception {};
 }
 
 #endif

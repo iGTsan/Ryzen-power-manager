@@ -11,19 +11,20 @@ namespace MI = manager_interface;
 
 namespace manager_core {
 
-    enum InterfaceStates 
+    enum CoreStates 
     {
         Show, 
         ValueInput, 
         FlagInput, 
         Off,
         Save,
-        Load
+        Load,
+        ChangeName
     };
 
     class Core {
     private:
-        InterfaceStates status = Show;
+        CoreStates status;
         std::string sudo_password;
         std::string profile_name;
         MI::Entry *menu;
@@ -35,9 +36,11 @@ namespace manager_core {
         void set_enabled(bool enabled);
         void set_value(const std::string& value);
         bool get_enabled();
+        void enable_command(const std::string& command);
+        void enable_flags(const std::string& flags);
 
     public:
-        Core(MI::Entry *menu) : menu(menu), main_menu(menu) {};
+        Core(MI::Entry *menu) : status(Show), menu(menu), main_menu(menu) {};
         Core(Core& other);
         Core(Core&& other);
 
@@ -48,7 +51,7 @@ namespace manager_core {
         void load_profile(const std::string& name);
 
         MI::Entry *get_menu() {return menu;}
-        InterfaceStates get_status() const {return status;}
+        CoreStates get_status() const {return status;}
 
         void choose(size_t n);
 
@@ -59,8 +62,8 @@ namespace manager_core {
     class FileError : std::exception {};
     class NoProfileName : std::exception {};
     class WrongMenuType : std::exception {};
-    class WrongEntryType : std::exception {};
-
+    class CantOpenFile : FileError {};
+    class WrongFlagName : FileError {};
 
     MI::Entry *parse(const std::string& filename);
 }
