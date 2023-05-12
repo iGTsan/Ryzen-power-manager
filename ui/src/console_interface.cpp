@@ -1,4 +1,4 @@
-#include "smth.h"
+#include "console_interface.h"
 
 void manager_ui::ConsoleInterface::show(std::ostream &ostream) 
 {

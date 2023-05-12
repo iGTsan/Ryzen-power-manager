@@ -223,13 +223,21 @@ void manager_core::Core::choose(size_t n) {
      }
 }
 
-manager_core::Core::Core(manager_core::Core &other) :
-     sudo_password(other.sudo_password), 
-     profile_name(other.profile_name), 
-     menu(other.menu), main_menu(other.menu) {}
-
 manager_core::Core::Core(manager_core::Core &&other) :
+     status(other.status),
      sudo_password(std::move(other.sudo_password)),
      profile_name(std::move(other.profile_name)),
-     menu(other.menu), main_menu(other.menu) 
+     menu(other.menu), main_menu(other.menu)
      {other.menu = NULL, other.main_menu = NULL;}
+
+manager_core::Core &manager_core::Core::operator=(Core &&other)
+{
+     status = other.status;
+     sudo_password = std::move(other.sudo_password);
+     profile_name = std::move(other.profile_name);
+     menu = other.menu;
+     main_menu = other.menu;
+     other.menu = NULL;
+     other.main_menu = NULL;
+     return *this;
+}

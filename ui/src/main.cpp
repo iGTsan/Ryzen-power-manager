@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
 #include "core.h"
-#include "smth.h"
+#include "console_interface.h"
 
 int main() {
 	manager_core::Core core(manager_core::parse("to_parse"));
-	manager_ui::ConsoleInterface interface(core);
+	manager_ui::ConsoleInterface interface(std::move(core));
 	std::string value;
 	size_t choose;
 	while (interface.get_status() != manager_core::CoreStates::Off) {

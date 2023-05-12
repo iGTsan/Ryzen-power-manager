@@ -9,10 +9,9 @@ namespace manager_ui {
 
     class ConsoleInterface : public MC::Core {
     public:
-        ConsoleInterface(MC::Core& core) : Core(std::move(core)) {}
+        ConsoleInterface(MC::Core&& core) : Core(std::move(core)) {}
         void show(std::ostream& ostream);
         void check_input(std::ostream& ostream, std::istream& istream);
         void value_input(std::ostream& ostream, std::istream& istream);
-        // ~ConsoleInterface() {std::cout << "ConsoleInterface destructor" << std::endl;}
     };
 }

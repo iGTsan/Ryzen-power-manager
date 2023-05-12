@@ -34,7 +34,7 @@ manager_interface::Entry *manager_interface::Entry::get_subentry(size_t n)
 {
     if (n == subentries.size())
         return parent;
-    if (n < 0 || n > subentries.size())
+    if (n > subentries.size())
         throw WrongOption();
     return subentries[n];
 }

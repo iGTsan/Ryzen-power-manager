@@ -41,8 +41,9 @@ namespace manager_core {
 
     public:
         Core(MI::Entry *menu) : status(Show), menu(menu), main_menu(menu) {};
-        Core(Core& other);
         Core(Core&& other);
+
+        Core& operator = (Core&& other);
 
         void set_password(const std::string& password);
         void set_profile_name(const std::string& name) { profile_name = name; }

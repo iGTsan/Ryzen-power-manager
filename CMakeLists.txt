@@ -4,8 +4,7 @@ set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 project(ryzen-power-manager VERSION 1.0 LANGUAGES CXX)
 
-# option(MANAGER_TESTING "Включить модульное тестирование" ON)
-# option(MANAGER_COVERAGE "Включить измерение покрытия кода тестами" OFF)
+
 
 add_compile_options(
     -Werror
@@ -32,24 +31,17 @@ if(NOT CMAKE_CXX_EXTENSIONS)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
-
 set(SRC_DIR src)
 
-
-
 set(EXECUTABLE ryzen_manager)
-set(LIBRARY lib)
+set(LIBRARY ryzen_manager_lib)
+set(LIBRARY_PATH lib)
 set(UI ui)
 # set(SOURCE ui/src/main.cpp)
 file(GLOB SOURCES ui/src/*.cpp)
 
-include_directories(${LIBRARY}/headers/)
+include_directories(${LIBRARY_PATH}/headers/)
 include_directories(${UI}/headers/)
-
-
-
-
-# message("SOURCES:" ${SOURCES})
 
 # set(SOURCES main.cpp)
 
@@ -63,7 +55,11 @@ message("SOURCES:" ${SOURCES})
 
 add_executable(${EXECUTABLE} ${SOURCES})
 
-add_subdirectory(lib)
+add_subdirectory(${LIBRARY_PATH})
+enable_testing()
+# if (BUILD_TESTING) 
+    add_subdirectory(test)
+# endif()
 # add_subdirectory(ui)
 
 target_link_libraries(${EXECUTABLE} ${LIBRARY})
